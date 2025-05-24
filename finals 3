@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+total_students = 100
+true_pass_rate = 0.75  
+students_passed = np.random.binomial(total_students, true_pass_rate)
+print("Observed students who passed:", students_passed)
+
+prior_alpha = 7
+prior_beta = 3
+
+posterior_alpha = prior_alpha + students_passed
+posterior_beta = prior_beta + (total_students - students_passed)
+
+posterior_pass_rate = np.random.beta(posterior_alpha, posterior_beta, size=10000)
+
+plt.figure(figsize=(8, 4))
+plt.hist(posterior_pass_rate, bins=30, density=True, color='mediumpurple', edgecolor='black')
+plt.title("Posterior Distribution of Student Pass Rate")
+plt.xlabel("Pass Rate")
+plt.ylabel("Density")
+plt.axvline(np.mean(posterior_pass_rate), color='red', linestyle='--', label='Posterior Mean')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+mean_pass_rate = np.mean(posterior_pass_rate)
+std_pass_rate = np.std(posterior_pass_rate)
+print("Posterior mean of pass rate:", mean_pass_rate)
+print("Standard deviation of pass rate:", std_pass_rate)
+

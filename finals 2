@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+total_matches = 30
+true_win_prob = 0.6 
+wins = np.random.binomial(total_matches, true_win_prob)
+print("Observed wins:", wins)
+
+prior_alpha = 5
+prior_beta = 5
+
+posterior_alpha = prior_alpha + wins
+posterior_beta = prior_beta + (total_matches - wins)
+
+posterior_samples = np.random.beta(posterior_alpha, posterior_beta, size=10000)
+
+plt.figure(figsize=(8, 4))
+plt.hist(posterior_samples, bins=30, density=True, color='seagreen', edgecolor='black')
+plt.title("Posterior Distribution of Team Win Probability")
+plt.xlabel("Win Probability")
+plt.ylabel("Density")
+plt.axvline(np.mean(posterior_samples), color='red', linestyle='--', label='Posterior Mean')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+mean_win_rate = np.mean(posterior_samples)
+std_win_rate = np.std(posterior_samples)
+print("Posterior mean of win probability:", round(mean_win_rate, 4))
+print("Standard deviation of win probability:", round(std_win_rate, 4))

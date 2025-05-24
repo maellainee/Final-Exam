@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+num_tests = 1000
+true_disease_rate_given_positive = 0.06  
+num_true_positives = np.random.binomial(num_tests, true_disease_rate_given_positive)
+print("Observed confirmed disease cases among positives:", num_true_positives)
+
+prior_alpha = 5
+prior_beta = 95
+
+posterior_alpha = prior_alpha + num_true_positives
+posterior_beta = prior_beta + (num_tests - num_true_positives)
+
+posterior_samples = np.random.beta(posterior_alpha, posterior_beta, size=10000)
+
+plt.figure(figsize=(8, 4))
+plt.hist(posterior_samples, bins=30, density=True, color='skyblue', edgecolor='black')
+plt.title("Posterior Distribution: P(Disease | Positive Test)")
+plt.xlabel("Probability")
+plt.ylabel("Density")
+plt.axvline(np.mean(posterior_samples), color='red', linestyle='--', label='Posterior Mean')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+mean_posterior = np.mean(posterior_samples)
+std_posterior = np.std(posterior_samples)
+print("Posterior mean of P(Disease | Positive Test):", round(mean_posterior, 4))
+print("Standard deviation of P(Disease | Positive Test):", round(std_posterior, 4))
+
